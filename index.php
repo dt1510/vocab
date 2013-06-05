@@ -25,10 +25,17 @@ function highlight($word, $string) {
     return str_replace("$word", "<keyword>$word</keyword>", $string);
 }
 
-//get the word to learn/revise
-$word = get_least_recent_word();
-echo "<h2>$word</h2>";
+?>
+<div id="search">
+<form method="GET">
+<input type="search" name="word">
+</form>
+</div>
+<?
 
+//get the word to learn/revise
+$word = $_GET["word"] == "" ? get_least_recent_word() : $_GET["word"];
+echo "<h2>$word</h2>";
 //wordnet definition
 shell_exec("wn $word -over > temp.txt");
 $wn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
@@ -37,6 +44,15 @@ echo "<div class='entry'>";
 foreach($wn_lines as $wn_line) {
     if($wn_line == "")
         echo "</div><div class='entry'>";
+        
+    //syns{n|v|a|r}
+    /*preg_match("/^The noun/", $wn_line, $matches);
+    if(count($matches) > 0) {
+        shell_exec("wn $word -synsn > temp.txt");
+        $wn_syn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
+        print_r($wn_syn_lines);
+    }*/
+    
     preg_match("/^[0-9]/", $wn_line, $matches);    
     if(count($matches) == 0)
         continue;
