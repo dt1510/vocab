@@ -1,7 +1,11 @@
 <h2>Vocabulary Indexing</h2>
 indexing...
 <?php
+set_time_limit(0);
 function index_word($word) {
+    $word_file = "data/$word.txt";
+    if(file_exists($word_file))
+        return;
     $dir = "corpus/";
     $files = glob($dir."*.txt");
     $examples = array();
@@ -28,13 +32,18 @@ function index_word($word) {
     /ix';
         $sentences =  preg_split($re,$text);
         foreach($sentences as $sentence) {
+            $sentence = trim(preg_replace('/\s\s+/', ' ', $sentence));
             preg_match('/'.$word.'/', $sentence, $matches);
             if(count($matches) > 0) {
-                echo $sentence;
+                array_push($examples, $sentence);
+                if(count($examples) > 20)
+                    goto ready;
             }
-        }        
+        }
     }
-   
+    
+    ready:
+    file_put_contents($word_file, join("\n", $examples));
 }
 
 $vocabulary_file = "vl.txt";
@@ -43,7 +52,7 @@ $words = file($vocabulary_file, FILE_IGNORE_NEW_LINES);
 foreach($words as $word) {
     echo "<h4>$word</h4>";
     index_word($word);
-    break;
+    //break;
     flush();
 }
 echo "done.";
