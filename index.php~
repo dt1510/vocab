@@ -76,6 +76,8 @@ $old_file = "./data/".$word.".txt";
 $sentences = file($old_file, FILE_IGNORE_NEW_LINES);
 touch($old_file);
 foreach($sentences as $sentence) {
+    $sentence = iconv("UTF-8", "ISO-8859-1//TRANSIT", $sentence);
+    //$sentence = htmlentities($sentence);
     $sentence = highlight($word, $sentence);
     echo "$sentence<br />";
 }

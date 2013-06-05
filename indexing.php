@@ -37,6 +37,8 @@ function index_word($word) {
         $sentences =  preg_split($re,$text);
         foreach($sentences as $sentence) {
             $sentence = trim(preg_replace('/\s\s+/', ' ', $sentence));
+            $sentence = str_replace("\r\n", ' ', $sentence);
+            $sentence = str_replace("\n", ' ', $sentence);
             preg_match('/\b'.$word.'\b/', $sentence, $matches);
             if(count($matches) > 0) {
                 array_push($examples, $sentence);
