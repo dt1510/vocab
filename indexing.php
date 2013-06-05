@@ -42,7 +42,7 @@ function index_word($word) {
             preg_match('/\b'.$word.'\b/', $sentence, $matches);
             if(count($matches) > 0) {
                 array_push($examples, $sentence);
-                if(count($examples) > 50)
+                if(count($examples) > 100)
                     goto ready;
             }
         }
