@@ -30,9 +30,22 @@ $word = get_least_recent_word();
 echo "<h2>$word</h2>";
 
 //wordnet definition
-$wn = shell_exec("wn $word -over");
-echo "<div>".highlight($word, $wn)."</div>";
+shell_exec("wn $word -over > temp.txt");
+$wn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
+echo "<div class='wn'>";
+echo "<div class='entry'>";
+foreach($wn_lines as $wn_line) {
+    if($wn_line == "")
+        echo "</div><div class='entry'>";
+    preg_match("/^[0-9]/", $wn_line, $matches);    
+    if(count($matches) == 0)
+        continue;
+    echo highlight($word, $wn_line)."<br />";
+}
+echo "</div>";
+echo "</div>";
 
+//sentential examples
 echo "<div>";
 $old_file = "./data/".$word.".txt";
 $sentences = file($old_file, FILE_IGNORE_NEW_LINES);

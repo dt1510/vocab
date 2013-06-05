@@ -2,6 +2,11 @@
 indexing...
 <?php
 set_time_limit(0);
+
+function sentence_sort($a, $b) {
+    return strlen($a)-strlen($b);
+}
+
 function index_word($word) {
     $word_file = "data/$word.txt";
     if(file_exists($word_file))
@@ -11,7 +16,6 @@ function index_word($word) {
     $examples = array();
     foreach($files as $file)
     {
-        //echo "<h4>$text</h4>";
         $text = file_get_contents($file);
         $re = '/# Split sentences on whitespace between them.
     (?<=                # Begin positive lookbehind.
@@ -33,21 +37,21 @@ function index_word($word) {
         $sentences =  preg_split($re,$text);
         foreach($sentences as $sentence) {
             $sentence = trim(preg_replace('/\s\s+/', ' ', $sentence));
-            preg_match('/'.$word.'/', $sentence, $matches);
+            preg_match('/\b'.$word.'\b/', $sentence, $matches);
             if(count($matches) > 0) {
                 array_push($examples, $sentence);
-                if(count($examples) > 20)
+                if(count($examples) > 50)
                     goto ready;
             }
         }
     }
     
     ready:
-    file_put_contents($word_file, join("\n", $examples));
+    usort($examples,'sentence_sort');
+    file_put_contents($word_file, join("\n", array_slice($examples, 0, 20)));
 }
 
 $vocabulary_file = "vl.txt";
-
 $words = file($vocabulary_file, FILE_IGNORE_NEW_LINES);
 foreach($words as $word) {
     echo "<h4>$word</h4>";
