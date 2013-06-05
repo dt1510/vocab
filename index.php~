@@ -1,3 +1,6 @@
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <?php
 //Learn English Vocabulary
 function get_least_recent_word() {
@@ -17,16 +20,27 @@ function get_least_recent_word() {
     $parts = preg_split("/[.]/", $latest_filename);
     return $parts[0];
 }
-    
-    
+
+function highlight($word, $string) {
+    return str_replace("$word", "<b>$word</b>", $string);
+}
+
+//get the word to learn/revise
 $word = get_least_recent_word();
 echo "<h2>$word</h2>";
+
+//wordnet definition
+$wn = shell_exec("wn $word -over");
+echo "<div>".highlight($word, $wn)."</div>";
+
+echo "<div>";
 $old_file = "./data/".$word.".txt";
 $sentences = file($old_file, FILE_IGNORE_NEW_LINES);
 touch($old_file);
 foreach($sentences as $sentence) {
-    $sentence = str_replace("$word", "<b>$word</b>", $sentence);
+    $sentence = highlight($word, $sentence);
     echo "$sentence<br />";
 }
+echo "</div>";
         
 ?>
