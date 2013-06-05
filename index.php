@@ -1,6 +1,9 @@
+<html>
 <head>
 <link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-2.0.2.min.js"></script>
 </head>
+<body>
 <?php
 //Learn English Vocabulary
 function get_least_recent_word() {
@@ -25,17 +28,23 @@ function highlight($word, $string) {
     return str_replace("$word", "<keyword>$word</keyword>", $string);
 }
 
+//get the word to learn/revise
+$word = @$_GET["word"] == "" ? get_least_recent_word() : @$_GET["word"];
+
 ?>
-<div id="search">
+<div id="panel">
 <form method="GET">
-<input type="search" name="word">
+<input id="search" type="search" name="word">
 </form>
 </div>
 <?
-
-//get the word to learn/revise
-$word = $_GET["word"] == "" ? get_least_recent_word() : $_GET["word"];
 echo "<h2>$word</h2>";
+echo "<script>";
+echo "function archive() {";
+echo "window.location = '/archive.php?word=$word';";
+echo "}";
+echo "</script>";
+
 //wordnet definition
 shell_exec("wn $word -over > temp.txt");
 $wn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
@@ -73,3 +82,29 @@ foreach($sentences as $sentence) {
 echo "</div>";
         
 ?>
+</body>
+<script>
+    function typing() {
+        return $("#search").is(":focus");
+    }
+    
+    $('body').keypress(function() {
+        if(typing())
+            return;
+        if(event.keyCode == 97) {
+            archive();
+        }
+    });
+    $('body').keydown(function(e){
+        if(typing())
+            return;
+        //right arrow
+        if (e.keyCode == 39 || e.keyCode == 40) { 
+           window.location = "/";
+        } else if (e.keyCode == 38) {
+            $("#search").focus();
+        }
+        
+        });
+</script>
+</html>
