@@ -73,8 +73,10 @@ echo "</div>";
 //sentential examples
 echo "<div>";
 $old_file = "./data/".$word.".txt";
-$sentences = file($old_file, FILE_IGNORE_NEW_LINES);
 touch($old_file);
+shell_exec("grep -h $word corpus/* > .sentences");
+$old_file = '.sentences';
+$sentences = file($old_file, FILE_IGNORE_NEW_LINES);
 foreach($sentences as $sentence) {
     $sentence = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $sentence);
     //$sentence = htmlentities($sentence);
