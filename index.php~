@@ -5,14 +5,35 @@
 </head>
 <body>
 <?php
+//load the revising group
+$groups_total = file_get_contents(".groups_total")*1;
+//current group marked from 1 to n
+$current_group = file_get_contents(".current_group")*1;
+function group_number($entry, $groups_total) {
+    $md5 = md5($entry);
+    $places = 4;
+    $head = substr($md5, 0, $places);
+    $number = hexdec($head);
+    $group_number = round($groups_total * ($number / pow(16, $places)));
+    if($group_number == 0)
+        $group_number = 1;
+    if($group_number > $groups_total)
+        $group_number = $groups_total;
+    return $group_number;
+}
+
 //Learn English Vocabulary
-function get_least_recent_word() {
+function get_least_recent_word($current_group, $groups_total) {
 //    `ls data --sort time -1 | head -1`
     $path = "./data"; 
     $latest_ctime = -1;
     $latest_filename = '';
     $d = dir($path);
     while (false !== ($entry = $d->read())) {
+        $group_number = group_number($entry, $groups_total);
+        if($group_number != $current_group)
+            continue;  
+      
       $filepath = "{$path}/{$entry}";
       // could do also other checks than just checking whether the entry is a file
       if (is_file($filepath) && ($latest_ctime == -1 || filectime($filepath) < $latest_ctime)) {
@@ -29,7 +50,7 @@ function highlight($word, $string) {
 }
 
 //get the word to learn/revise
-$word = @$_GET["word"] == "" ? get_least_recent_word() : @$_GET["word"];
+$word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
 
 ?>
 <div id="panel">
@@ -74,7 +95,7 @@ echo "</div>";
 echo "<div>";
 $old_file = "./data/".$word.".txt";
 touch($old_file);
-shell_exec("grep -h $word corpus/* > .sentences");
+shell_exec("grep -h -C 1 $word corpus/* > .sentences");
 $old_file = '.sentences';
 $sentences = file($old_file, FILE_IGNORE_NEW_LINES);
 foreach($sentences as $sentence) {
