@@ -8,7 +8,16 @@
 //load the revising group
 $groups_total = file_get_contents(".groups_total")*1;
 //current group marked from 1 to n
-$current_group = file_get_contents(".current_group")*1;
+//$current_group = file_get_contents(".current_group")*1;
+$current_group = current_group_from_timestamp($groups_total);
+
+function current_group_from_timestamp($groups_total) {
+    $date = new DateTime();
+    $ts = $date->getTimestamp();    
+    $days = $ts / (60*60*24);
+    return ($days % $groups_total)+1;    
+}
+
 function group_number($entry, $groups_total) {
     $md5 = md5($entry);
     $places = 4;
@@ -49,17 +58,41 @@ function highlight($word, $string) {
     return str_replace("$word", "<keyword>$word</keyword>", $string);
 }
 
+function get_pronunciation($word) {
+    $pron = shell_exec("grep -i '\b$word\b' cmudict.0.7a.txt | head -1");
+    $pron = substr($pron, strlen($word));
+    return arpabet_to_ipa($pron);
+}
+
+function arpabet_to_ipa($arpabet) {
+    $arpabet_conversion = file("Arpabet-to-IPA.txt", FILE_IGNORE_NEW_LINES);
+    //var_dump($arpabet_conversion);
+    $arpabet_hash = array();
+    foreach($arpabet_conversion as $entry) {
+        $cols = split(",", $entry);        
+        $arpabet_hash[$cols[0]] = $cols[2];        
+        
+    }
+    var_dump($arpabet_hash);
+    $phonems = split(" ", $arpabet);
+    $ipa = "";
+    foreach($phonems as $phonem) {
+        $phonem = trim($phonem);
+        if(@$arpabet_hash[$phonem] != "") {
+            $ipa .= $arpabet_hash[$phonem];
+        } else {
+            $p = str_replace(range(0,9),'', $phonem);
+            $ipa .= @$arpabet_hash[$p] == "" ? $p : $arpabet_hash[$p];
+        }
+    }
+    return $ipa;
+}
+
 //get the word to learn/revise
 $word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
+$pron = get_pronunciation($word);
 
-?>
-<div id="panel">
-<form method="GET">
-<input id="search" type="search" name="word">
-</form>
-</div>
-<?
-echo "<h2>$word</h2>";
+echo "<h2 title='revising group $current_group'>$word $pron</h2>";
 echo "<script>";
 echo "function archive() {";
 echo "window.location = '/archive.php?word=$word';";

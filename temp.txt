@@ -1,6 +1,9 @@
 
-Overview of noun orthography
+Overview of verb surmount
 
-The noun orthography has 1 sense (first 1 from tagged texts)
-                                     
-1. (8) orthography, writing system -- (a method of representing the sounds of a language by written or printed symbols)
+The verb surmount has 4 senses (first 2 from tagged texts)
+                                       
+1. (2) overcome, get over, subdue, surmount, master -- (get on top of; deal with successfully; "He overcame his shyness")
+2. (1) surmount -- (be on top of; "The scarf surmounted the gown")
+3. scale, surmount -- (reach the highest point of; "We scaled the Mont Blanc")
+4. surpass, outstrip, outmatch, outgo, exceed, outdo, surmount, outperform -- (be or do something to a greater degree; "her performance surpasses that of any other student I know"; "She outdoes all other athletes"; "This exceeds all my expectations"; "This car outperforms all others in its class")
