@@ -96,6 +96,14 @@ function arpabet_to_ipa($arpabet) {
 $word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
 $pron = get_pronunciation($word);
 
+?>
+<div id="panel">
+<form method="GET">
+<input id="search" type="search" name="word">
+</form>
+</div>
+<?
+
 echo "<h2 title='revising group $current_group'>$word <pron>$pron</pron></h2>";
 echo "<script>";
 echo "function archive() {";
