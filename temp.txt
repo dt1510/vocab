@@ -1,9 +1,8 @@
 
-Overview of verb surmount
+Overview of noun transgression
 
-The verb surmount has 4 senses (first 2 from tagged texts)
-                                       
-1. (2) overcome, get over, subdue, surmount, master -- (get on top of; deal with successfully; "He overcame his shyness")
-2. (1) surmount -- (be on top of; "The scarf surmounted the gown")
-3. scale, surmount -- (reach the highest point of; "We scaled the Mont Blanc")
-4. surpass, outstrip, outmatch, outgo, exceed, outdo, surmount, outperform -- (be or do something to a greater degree; "her performance surpasses that of any other student I know"; "She outdoes all other athletes"; "This exceeds all my expectations"; "This car outperforms all others in its class")
+The noun transgression has 3 senses (first 1 from tagged texts)
+                                  
+1. (1) transgression, evildoing -- (the act of transgressing; the violation of a law or a duty or moral principle; "the boy was punished for the transgressions of his father")
+2. transgression -- (the spreading of the sea over land as evidenced by the deposition of marine strata over terrestrial strata)
+3. transgression -- (the action of going beyond or overstepping some boundary or limit)

@@ -73,15 +73,19 @@ function arpabet_to_ipa($arpabet) {
         $arpabet_hash[$cols[0]] = $cols[2];        
         
     }
-    var_dump($arpabet_hash);
     $phonems = split(" ", $arpabet);
     $ipa = "";
     foreach($phonems as $phonem) {
-        $phonem = trim($phonem);
+        $phonem = trim($phonem);        
+        $phonem = str_replace(range(2,9),'1',$phonem);
+        /*if(strpos($phonem, "1") !== false)
+            $ipa .= "&#716;";
+        if(strpos($phonem, "0") !== false)
+            $ipa .= "&#712;";*/
         if(@$arpabet_hash[$phonem] != "") {
             $ipa .= $arpabet_hash[$phonem];
         } else {
-            $p = str_replace(range(0,9),'', $phonem);
+            $p = str_replace(range(0,9),'', $phonem);            
             $ipa .= @$arpabet_hash[$p] == "" ? $p : $arpabet_hash[$p];
         }
     }
@@ -92,7 +96,7 @@ function arpabet_to_ipa($arpabet) {
 $word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
 $pron = get_pronunciation($word);
 
-echo "<h2 title='revising group $current_group'>$word $pron</h2>";
+echo "<h2 title='revising group $current_group'>$word <pron>$pron</pron></h2>";
 echo "<script>";
 echo "function archive() {";
 echo "window.location = '/archive.php?word=$word';";
