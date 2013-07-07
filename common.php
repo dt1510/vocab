@@ -10,6 +10,10 @@
         mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
     }
     
+    function archive($con, $word) {
+        mysqli_query($con, "UPDATE vocabulary SET level='".ARCHIVED_LEVEL."' WHERE word='$word'");
+    }
+    
     function update_timestamp($con, $word) {
         mysqli_query($con, "UPDATE vocabulary SET revised=CURRENT_TIMESTAMP WHERE word='$word'");
     }

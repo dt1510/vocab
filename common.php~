@@ -10,6 +10,10 @@
         mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
     }
     
+    function archive($con, $word) {
+        mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
+    }
+    
     function update_timestamp($con, $word) {
         mysqli_query($con, "UPDATE vocabulary SET revised=CURRENT_TIMESTAMP WHERE word='$word'");
     }
@@ -54,7 +58,6 @@
                 break;
             }
         }
-        echo "<h1>Chosen level $chosen_level</h1>";
         $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level='$chosen_level' ORDER BY revised ASC LIMIT 1");
         $row = mysqli_fetch_array($result);
         return $row[0];

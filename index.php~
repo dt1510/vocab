@@ -7,6 +7,7 @@
 <?php
 include "common.php";
 $con = db_connect();
+update_0_level();
 
 function highlight($word, $string) {
     return str_replace("$word", "<keyword>$word</keyword>", $string);
@@ -65,6 +66,9 @@ echo "<script>";
 echo "function archive() {";
 echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"]))."/archive.php?word=$word';";
 echo "}";
+echo "function inc_level() {";
+echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"]))."/inc_level.php?word=$word';";
+echo "}";
 echo "</script>";
 
 //wordnet definition
@@ -116,6 +120,9 @@ echo "</div>";
             return;
         if(event.keyCode == 97) {
             archive();
+        } else
+        if(event.keyCode == 105) {
+            inc_level();
         }
     });
     $('body').keydown(function(e){
