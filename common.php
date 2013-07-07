@@ -44,8 +44,19 @@
             $importance[$i] = $levels[$i]*pow(SPACED_REPETITION_COEFFICIENT, LEARNING_LEVELS-$i-1);
         }
         
-        var_dump($levels);
-        var_dump($importance);
+        $chosen_level = 0;
+        $rand = mt_rand(0, array_sum($importance)-1);
+        $upto = 0;
+        for($i=0; $i<LEARNING_LEVELS; $i++) {
+            $upto+=$importance[$i];
+            if($rand<$upto) {
+                $chosen_level = $i;
+                break;
+            }
+        }
+        $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level='$chosen_level' ORDER BY revised ASC LIMIT 1");
+        $row = mysqli_fetch_array($result);
+        return $row[0];
     }
     
     function db_connect() {

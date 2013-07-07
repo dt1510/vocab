@@ -5,6 +5,8 @@
 </head>
 <body>
 <?php
+include "common.php";
+$con = db_connect();
 //load the revising group
 $groups_total = file_get_contents(".groups_total")*1;
 //current group marked from 1 to n
@@ -93,7 +95,9 @@ function arpabet_to_ipa($arpabet) {
 }
 
 //get the word to learn/revise
-$word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
+//$word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
+$word = @$_GET["word"] == "" ? get_word($con) : @$_GET["word"];
+update_timestamp($con, $word);
 $pron = get_pronunciation($word);
 
 ?>
