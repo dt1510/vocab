@@ -123,7 +123,7 @@ echo "</div>";
             return;
         //right arrow
         if (e.keyCode == 39 || e.keyCode == 40) { 
-           window.location.reload();
+           window.location.replace(window.location.pathname);
         } else if (e.keyCode == 38) {
             $("#search").focus();
         }

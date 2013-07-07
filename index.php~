@@ -95,8 +95,7 @@ echo "</div>";
 //sentential examples
 echo "<div>";
 shell_exec("grep -h -C 1 $word corpus/* > .sentences");
-$old_file = '.sentences';
-$sentences = file($old_file, FILE_IGNORE_NEW_LINES);
+$sentences = file(".sentences", FILE_IGNORE_NEW_LINES);
 foreach($sentences as $sentence) {
     $sentence = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $sentence);
     //$sentence = htmlentities($sentence);
@@ -124,7 +123,7 @@ echo "</div>";
             return;
         //right arrow
         if (e.keyCode == 39 || e.keyCode == 40) { 
-           window.location.reload();
+           window.location.replace(window.location.pathname);
         } else if (e.keyCode == 38) {
             $("#search").focus();
         }
