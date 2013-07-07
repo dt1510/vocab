@@ -107,7 +107,7 @@ $pron = get_pronunciation($word);
 echo "<h2 title='revising group $current_group'>$word <pron>$pron</pron></h2>";
 echo "<script>";
 echo "function archive() {";
-echo "window.location = '/archive.php?word=$word';";
+echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"]))."/archive.php?word=$word';";
 echo "}";
 echo "</script>";
 
@@ -170,7 +170,7 @@ echo "</div>";
             return;
         //right arrow
         if (e.keyCode == 39 || e.keyCode == 40) { 
-           window.location = "/";
+           window.location.reload();
         } else if (e.keyCode == 38) {
             $("#search").focus();
         }
