@@ -102,12 +102,19 @@ shell_exec("grep -h -C 1 $word corpus/* | head -100 > .sentences");
 $sentences = file(".sentences", FILE_IGNORE_NEW_LINES);
 $hash = array();
 foreach($sentences as $sentence) {
-    //do not display the duplicate entries
-    if(isset($hash[$sentence]))
+    //do not display the duplicate entries unless the entry is an empty line
+    $now_new_line = strlen($sentence)<5;
+    $duplicate_line_break = $now_new_line && $previous_new_line;
+    $duplicate_sentence_entry = isset($hash[$sentence]) && !$now_new_line;
+    //echo "dup$duplicate_line_break isset".isset($hash[$sentence])."<br />";
+    if($duplicate_sentence_entry || $duplicate_line_break)
         continue;
+    $previous_new_line = strlen($sentence)<5;
+    //echo "<h1>$previous_not_new_line</h2>";
+        
     $hash[$sentence]=1;
     
-    $sentence = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $sentence);
+    $sentence = @iconv("UTF-8", "ISO-8859-1//TRANSLIT", $sentence);
     //$sentence = htmlentities($sentence);
     $sentence = highlight($word, $sentence);
     echo "$sentence<br />";
