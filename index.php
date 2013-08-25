@@ -98,9 +98,15 @@ echo "</div>";
 
 //sentential examples
 echo "<div>";
-shell_exec("grep -h -C 1 $word corpus/* > .sentences");
+shell_exec("grep -h -C 1 $word corpus/* | head -100 > .sentences");
 $sentences = file(".sentences", FILE_IGNORE_NEW_LINES);
+$hash = array();
 foreach($sentences as $sentence) {
+    //do not display the duplicate entries
+    if(isset($hash[$sentence]))
+        continue;
+    $hash[$sentence]=1;
+    
     $sentence = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $sentence);
     //$sentence = htmlentities($sentence);
     $sentence = highlight($word, $sentence);
