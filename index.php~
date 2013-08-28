@@ -11,11 +11,12 @@ $con = db_connect();
 update_0_level($con);
 
 function get_regex($word) {
-    return \b(dis|in|mis)?$word(d|ed|s|es|r|er|ence|ment|ments|ly)?\b;
+    return "\b(dis|in|mis)?$word(d|ed|s|es|r|er|ence|ment|ments|ly)?\b";
 }
 
 function highlight($word, $string) {
-    return str_replace("$word", "<keyword>$word</keyword>", $string);
+    return preg_replace("/(".get_regex($word).")/", "<keyword>$1</keyword>", $string);
+    //return str_replace("$word", "<keyword>$word</keyword>", $string);
 }
 
 function get_pronunciation($word) {

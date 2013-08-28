@@ -15,7 +15,8 @@ function get_regex($word) {
 }
 
 function highlight($word, $string) {
-    return str_replace("$word", "<keyword>$word</keyword>", $string);
+    return preg_replace("/(".get_regex($word).")/", "<keyword>$1</keyword>", $string);
+    //return str_replace("$word", "<keyword>$word</keyword>", $string);
 }
 
 function get_pronunciation($word) {
