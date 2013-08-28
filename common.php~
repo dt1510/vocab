@@ -95,7 +95,7 @@
             preg_match("/^[0-9]/", $wn_line, $matches);    
             if(count($matches) == 0)
                 continue;
-            echo highlight($word, $wn_line);
+            echo highlight($word, $wn_line)."<br />";
         }
         echo "</div>";
         echo "</div>";
