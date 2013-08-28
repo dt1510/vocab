@@ -33,6 +33,55 @@
         $row = mysqli_fetch_array($result);
         return $row[0]*1;
     }
+
+    function get_pronunciation($word) {
+        $pron = shell_exec("grep -i '\b$word\b' cmudict.0.7a.txt | head -1");
+        $pron = substr($pron, strlen($word));
+        return arpabet_to_ipa($pron);
+    }
+
+    function arpabet_to_ipa($arpabet) {
+        $arpabet_conversion = file("Arpabet-to-IPA.txt", FILE_IGNORE_NEW_LINES);
+        //var_dump($arpabet_conversion);
+        $arpabet_hash = array();
+        foreach($arpabet_conversion as $entry) {
+            $cols = split(",", $entry);        
+            $arpabet_hash[$cols[0]] = $cols[2];        
+            
+        }
+        $phonems = split(" ", $arpabet);
+        $ipa = "";
+        foreach($phonems as $phonem) {
+            $phonem = trim($phonem);        
+            $phonem = str_replace(range(2,9),'1',$phonem);
+            /*if(strpos($phonem, "1") !== false)
+                $ipa .= "&#716;";
+            if(strpos($phonem, "0") !== false)
+                $ipa .= "&#712;";*/
+            if(@$arpabet_hash[$phonem] != "") {
+                $ipa .= $arpabet_hash[$phonem];
+            } else {
+                $p = str_replace(range(0,9),'', $phonem);            
+                $ipa .= @$arpabet_hash[$p] == "" ? $p : $arpabet_hash[$p];
+            }
+        }
+        return $ipa;
+    }
+
+
+    function word_heading($word) {
+        $pron = get_pronunciation($word);
+        echo "<h2>$word <pron>$pron</pron></h2>";
+    }
+    
+    function get_regex($word) {
+        return "\b(dis|in|mis)?$word(d|ed|s|es|r|er|ence|ment|ments|ly)?\b";
+    }
+
+    function highlight($word, $string) {
+        return preg_replace("/(".get_regex($word).")/", "<keyword>$1</keyword>", $string);
+        //return str_replace("$word", "<keyword>$word</keyword>", $string);
+    }
     
     function define_word($word) {
         //wordnet definition

@@ -10,15 +10,6 @@ include "common.php";
 $con = db_connect();
 update_0_level($con);
 
-function get_regex($word) {
-    return "\b(dis|in|mis)?$word(d|ed|s|es|r|er|ence|ment|ments|ly)?\b";
-}
-
-function highlight($word, $string) {
-    return preg_replace("/(".get_regex($word).")/", "<keyword>$1</keyword>", $string);
-    //return str_replace("$word", "<keyword>$word</keyword>", $string);
-}
-
 function get_pronunciation($word) {
     $pron = shell_exec("grep -i '\b$word\b' cmudict.0.7a.txt | head -1");
     $pron = substr($pron, strlen($word));
@@ -57,7 +48,6 @@ function arpabet_to_ipa($arpabet) {
 //$word = @$_GET["word"] == "" ? get_least_recent_word($current_group, $groups_total) : @$_GET["word"];
 $word = @$_GET["word"] == "" ? get_word($con) : @$_GET["word"];
 update_timestamp($con, $word);
-$pron = get_pronunciation($word);
 
 ?>
 <div id="panel">
@@ -67,7 +57,7 @@ $pron = get_pronunciation($word);
 </div>
 <?
 
-echo "<h2>$word <pron>$pron</pron></h2>";
+word_heading($word);
 echo "<script>";
 echo "function archive() {";
 echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"]))."/archive.php?word=$word';";

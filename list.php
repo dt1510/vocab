@@ -12,8 +12,7 @@ $con = db_connect();
 $words = get_active_list($con);
 
 foreach($words as $word) {
-    function
-    echo $word;
+    define_word($word);
 }
 
 ?>
