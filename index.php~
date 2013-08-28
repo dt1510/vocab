@@ -6,8 +6,13 @@
 <body>
 <?php
 include "common.php";
+
 $con = db_connect();
 update_0_level($con);
+
+function get_regex($word) {
+    return \b(dis|in|mis)?$word(d|ed|s|es|r|er|ence|ment|ments|ly)?\b;
+}
 
 function highlight($word, $string) {
     return str_replace("$word", "<keyword>$word</keyword>", $string);
@@ -98,17 +103,17 @@ echo "</div>";
 
 //sentential examples
 echo "<div>";
-shell_exec("grep -h -C 1 $word corpus/* | head -100 > .sentences");
+shell_exec("grep -h -C 1 -E \"".get_regex($word)."\" corpus/* | head -100 > .sentences");
 $sentences = file(".sentences", FILE_IGNORE_NEW_LINES);
 $hash = array();
 foreach($sentences as $sentence) {
     //do not display the duplicate entries unless the entry is an empty line
     $now_new_line = strlen($sentence)<5;
-    $duplicate_line_break = $now_new_line && $previous_new_line;
+    $duplicate_line_break = $now_new_line && @$previous_new_line;
     $duplicate_sentence_entry = isset($hash[$sentence]) && !$now_new_line;
     //echo "dup$duplicate_line_break isset".isset($hash[$sentence])."<br />";
     if($duplicate_sentence_entry || $duplicate_line_break)
-        continue;*/
+        continue;
     $previous_new_line = strlen($sentence)<5;
     //echo "<h1>$previous_not_new_line</h2>";
         
