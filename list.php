@@ -12,6 +12,7 @@ $con = db_connect();
 $words = get_active_list($con);
 
 foreach($words as $word) {
+    word_heading($word);
     define_word($word);
 }
 
@@ -19,3 +20,9 @@ foreach($words as $word) {
 
 </body>
 </html>
+<style>
+    div {padding-bottom: 1px;}
+    keyword {color: #ff0000; font-weight: bold;}
+    div.entry {padding-bottom:1px;}
+    div.wn {color: #777;}
+</style>
