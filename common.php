@@ -5,6 +5,16 @@
         mysqli_query($con,"INSERT INTO vocabulary (word, level, revised)
         VALUES ('$word', -1, 0)");
     }
+
+    //returns the list of words that in the process of being learnt
+    function get_active_list($con) { 
+        $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level>-1 ORDER BY revised ASC");
+        $words = array();
+        while($row = mysqli_fetch_array($result)) {
+            array_push($words, $row[0]);
+        }
+        return $words;   
+    }
     
     function inc_level($con, $word) {
         mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
@@ -22,6 +32,24 @@
         $result = mysqli_query($con, "SELECT COUNT(*) as count FROM vocabulary WHERE level='$level'");
         $row = mysqli_fetch_array($result);
         return $row[0]*1;
+    }
+    
+    function define_word($word) {
+        //wordnet definition
+        shell_exec("wn $word -over > temp.txt");
+        $wn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
+        echo "<div class='wn'>";
+        echo "<div class='entry'>";
+        foreach($wn_lines as $wn_line) {
+            if($wn_line == "")
+                echo "</div><div class='entry'>";    
+            preg_match("/^[0-9]/", $wn_line, $matches);    
+            if(count($matches) == 0)
+                continue;
+            echo highlight($word, $wn_line)."<br />";
+        }
+        echo "</div>";
+        echo "</div>";
     }
     
     //if there are not sufficiently many words at the level 0, then words which have not been learnt yet, are added

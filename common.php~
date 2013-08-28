@@ -5,13 +5,23 @@
         mysqli_query($con,"INSERT INTO vocabulary (word, level, revised)
         VALUES ('$word', -1, 0)");
     }
+
+    //returns the list of words that in the process of being learnt
+    function get_active_list($con) { 
+        $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level>-1 ORDER BY revised ASC");
+        $words = array();
+        while($row = mysqli_fetch_array($result)) {
+            array_push($words, $row[0]);
+        }
+        return $words;   
+    }
     
     function inc_level($con, $word) {
         mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
     }
     
     function archive($con, $word) {
-        mysqli_query($con, "UPDATE vocabulary SET level=level+1 WHERE word='$word'");
+        mysqli_query($con, "UPDATE vocabulary SET level='".ARCHIVED_LEVEL."' WHERE word='$word'");
     }
     
     function update_timestamp($con, $word) {
@@ -22,6 +32,9 @@
         $result = mysqli_query($con, "SELECT COUNT(*) as count FROM vocabulary WHERE level='$level'");
         $row = mysqli_fetch_array($result);
         return $row[0]*1;
+    }
+    
+    function define_word($word) {
     }
     
     //if there are not sufficiently many words at the level 0, then words which have not been learnt yet, are added

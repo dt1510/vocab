@@ -77,30 +77,7 @@ echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_R
 echo "}";
 echo "</script>";
 
-//wordnet definition
-shell_exec("wn $word -over > temp.txt");
-$wn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
-echo "<div class='wn'>";
-echo "<div class='entry'>";
-foreach($wn_lines as $wn_line) {
-    if($wn_line == "")
-        echo "</div><div class='entry'>";
-        
-    //syns{n|v|a|r}
-    /*preg_match("/^The noun/", $wn_line, $matches);
-    if(count($matches) > 0) {
-        shell_exec("wn $word -synsn > temp.txt");
-        $wn_syn_lines = file("temp.txt", FILE_IGNORE_NEW_LINES);
-        print_r($wn_syn_lines);
-    }*/
-    
-    preg_match("/^[0-9]/", $wn_line, $matches);    
-    if(count($matches) == 0)
-        continue;
-    echo highlight($word, $wn_line)."<br />";
-}
-echo "</div>";
-echo "</div>";
+define_word($word);
 
 //sentential examples
 echo "<div>";
