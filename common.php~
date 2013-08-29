@@ -113,6 +113,18 @@
         }
     }
     
+    function timer() {
+        ?>
+        <div id="timer" style="float:right; padding:2px;padding-right:10px;">0</div>
+        <script>
+            function increment_timer() {
+                $('#timer').html(parseInt($('#timer').html(), 10)+1);
+            }
+            setInterval(increment_timer, 1000);
+        </script>
+        <?
+    }
+    
     function get_word($con) {
         $levels = array();
         for($i=0; $i<LEARNING_LEVELS; $i++) {

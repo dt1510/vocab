@@ -22,7 +22,7 @@ update_timestamp($con, $word);
 </form>
 </div>
 <?
-
+timer();
 word_heading($word);
 echo "<script>";
 echo "function archive() {";
@@ -32,9 +32,7 @@ echo "function inc_level() {";
 echo "window.location = '".substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"]))."/inc_level.php?word=$word';";
 echo "}";
 echo "</script>";
-
 define_word($word);
-
 //sentential examples
 echo "<div>";
 shell_exec("grep -h -C 1 -E \"".get_regex($word)."\" corpus/* | head -100 > .sentences");
