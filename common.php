@@ -8,7 +8,7 @@
 
     //returns the list of words that in the process of being learnt
     function get_active_list($con) { 
-        $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level>-1 ORDER BY revised ASC");
+        $result = mysqli_query($con, "SELECT word FROM vocabulary WHERE level>-1 && level<".LEARNING_LEVELS." ORDER BY word ASC");
         $words = array();
         while($row = mysqli_fetch_array($result)) {
             array_push($words, $row[0]);
